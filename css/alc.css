@@ -1,0 +1,40 @@
+#fetchimi-window {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.8);
+    color: #FFFFFF !important;
+    font-family: mplus-2p-black;
+    padding: 4px !important;
+    position: absolute;
+    word-wrap: break-word;
+    z-index: 7777;
+}
+#fetchimi-window .searching {
+    background: url("chrome://fetchimi/skin/throbber.png") no-repeat scroll left center transparent;
+    color: #FFFFFF !important;
+    font-weight: bold;
+    padding-left: 25px;
+    padding-right: 10px;
+}
+#fetchimi-window .wordlink, #fetchimi-window .searchwordfont {
+    color: #FFFF00 !important;
+    font-weight: bold;
+}
+#fetchimi-window .wordclass, #fetchimi-window .label {
+    color: #99FF33 !important;
+}
+#fetchimi-window .kana {
+    font-size: 0 !important;
+}
+#fetchimi-window ol, #fetchimi-window ul, #fetchimi-window li, #fetchimi-window div {
+    color: #FFFFFF !important;
+}
+#fetchimi-window .midashi {
+    background: url("chrome://fetchimi/skin/speakeroff.png") no-repeat scroll right center transparent;
+    color: #FFFFFF !important;
+    padding-right: 20px;
+}
+#fetchimi-window ol {
+	list-style-type: decimal;
+}
+#fetchimi-window ol li {
+	margin-top: 0em;
+}

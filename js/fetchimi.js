@@ -41,14 +41,16 @@ FetchImi.Alc = Backbone.Model.extend({
 	  	}, this));
 	}
 });
-$(function() {
-	console.log("read");
-	var alc = new FetchImi.Alc();
-	alc.set("word", "play");
-	alc.fetch().done(function() {
-		console.log(alc.isFind());
-		console.log(alc.getMidashi());
-		console.log(alc.getPron());
-		console.log(alc.getDescriptions());
-	});
+var alc = new FetchImi.Alc();
+chrome.extension.onConnect.addListener(function(port) {
+  console.assert(port.name === "FetchImi.Alc");
+  port.onMessage.addListener(function(msg) {
+  	if(! msg.word) {
+  		return;
+  	}
+  	alc.set("word", msg.word);
+  	alc.fetch().done(function() {
+  		port.postMessage({status: "find", detail:alc.get("$detail").html()});
+  	});
+  });
 });
