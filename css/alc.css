@@ -6,6 +6,8 @@
     position: absolute;
     word-wrap: break-word;
     z-index: 7777;
+    width: auto;
+    height: auto;
 }
 #fetchimi-window .searching {
     background: url("chrome://fetchimi/skin/throbber.png") no-repeat scroll left center transparent;

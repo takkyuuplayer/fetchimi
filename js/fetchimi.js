@@ -15,7 +15,8 @@ FetchImi.Alc = Backbone.Model.extend({
 		if(!this.get("$detail")) {
 			return false;
 		}
-		return this.get("word") === this.getMidashi();
+		var reg = new RegExp("^"+this.get("word")+"$", "i");
+		return reg.test(this.getMidashi());
 	},
 	getPron: function() {
 		if(!this.get("$detail")) {
@@ -50,7 +51,9 @@ chrome.extension.onConnect.addListener(function(port) {
   	}
   	alc.set("word", msg.word);
   	alc.fetch().done(function() {
-  		port.postMessage({status: "find", detail:alc.get("$detail").html()});
+  		if( alc.isFind() ) {
+	  		port.postMessage({status: "find", detail:alc.get("$detail").html()});
+	  	}
   	});
   });
 });

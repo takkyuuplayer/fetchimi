@@ -1,20 +1,22 @@
+(function($) {
 var before = '';
+var ITime = null;
+var pageX = 0, pageY = 0;
 $(function() {
-	$('body').append('<div id="fetchimi-window">');
-	$('body').on('click', function() {
-		var port = chrome.extension.connect({name: "FetchImi.Alc"});
-		port.postMessage({word: "play"});
+	$('body').append('<div id="fetchimi-window" style="display:none;">');
+	var port = chrome.extension.connect({name: "FetchImi.Alc"});
 		port.onMessage.addListener(function(msg) {
 			if(msg.status === "find") {
-				$("#fetchimi-window").html(msg.detail);
+				onText(msg.detail);
 			}
 		});
-	});
 	$('body').mousemove(function(e) {
+		$('#fetchimi-window').css('display', 'none');
 		var range = document.caretRangeFromPoint(e.clientX, e.clientY);
 		var node = range.startContainer;
 		var onmousetext = node.textContent;
 		var mouseoffset = range.startOffset;
+		// グローバル変数なので、マウスを動かすたびに変更される
 		lTime = Date.now();
 		setTimeout(function(t) {
 			if (t != lTime) {
@@ -27,13 +29,14 @@ $(function() {
 				return;
 			}
 			var rng = getWordRange(node, mouseoffset);
-			if (rng == null || before == rng.toString())
+			if (rng == null || before == rng.toString()) {
 				return;
+			}
 			pageX = e.pageX;
 			pageY = e.pageY;
 			before = rng.toString();
-			alert(before);
-		}, 500, lTime);
+			port.postMessage({word: before});
+		}, 1000, lTime);
 	});
 });
 function getWordRange(textNode, n) {
@@ -54,3 +57,12 @@ function getWordRange(textNode, n) {
 	rng.setEnd(textNode, b);
 	return rng;
 }
+function onText( detail ) {
+    $("#fetchimi-window").ready(function() {
+    	$("#fetchimi-window").html(detail);
+    	$("#fetchimi-window").css('top', (pageY))
+    		.css('left', (pageX))
+    		.css('display', 'block');
+    });
+}
+})(jQuery);
