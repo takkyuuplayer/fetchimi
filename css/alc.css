@@ -10,7 +10,6 @@
     height: auto;
 }
 #fetchimi-window .searching {
-    background: url("chrome://fetchimi/skin/throbber.png") no-repeat scroll left center transparent;
     color: #FFFFFF !important;
     font-weight: bold;
     padding-left: 25px;

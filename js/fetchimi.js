@@ -45,7 +45,6 @@ FetchImi.Alc = Backbone.Model.extend({
 });
 var alc = new FetchImi.Alc();
 chrome.extension.onConnect.addListener(function(port) {
-  console.assert(port.name === "FetchImi.Alc");
   port.onMessage.addListener(function(msg) {
       if(! msg.word) {
           return;
