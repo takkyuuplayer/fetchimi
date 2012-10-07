@@ -3,11 +3,13 @@
     color: #FFFFFF !important;
     font-family: mplus-2p-black;
     padding: 4px !important;
+    margin: 0;
     position: absolute;
     word-wrap: break-word;
     z-index: 7777;
     width: auto;
     height: auto;
+    text-align: left;
 }
 #fetchimi-window .searching {
     color: #FFFFFF !important;
@@ -29,7 +31,6 @@
     color: #FFFFFF !important;
 }
 #fetchimi-window .midashi {
-    background: url("chrome://fetchimi/skin/speakeroff.png") no-repeat scroll right center transparent;
     color: #FFFFFF !important;
     padding-right: 20px;
 }
@@ -38,4 +39,5 @@
 }
 #fetchimi-window ol li {
 	margin-top: 0em;
+    line-height: 150%;
 }

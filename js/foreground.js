@@ -12,17 +12,17 @@ FetchImi.Foreground = function() {
 
 FetchImi.Foreground.prototype = {
     before: null,
-    relative: 0,
+    relative: 10,
     resetView: function() {
         $("#fetchimi-window").html('')
             .removeClass()
-            .css('discplay', 'none');
+            .css('display', 'none')
     },
     showLoading: function() {
         this.resetView()
         $("#fetchimi-window").text('検索中')
-            .css('top', (pageY-10))
-            .css('left', (pageX+10))
+            .css('top', (pageY+this.relative))
+            .css('left', (pageX+this.relative))
             .css('display', 'block')
             .addClass('searching');
     },
@@ -61,7 +61,6 @@ FetchImi.Foreground.prototype = {
             }, 1000, lTime);
         });
         this.port.onMessage.addListener(function(msg) {
-            console.log(msg);
             self.resetView()
             if(msg.status === "find") {
                 self.showDetail(msg.detail);
@@ -99,7 +98,7 @@ FetchImi.Foreground.prototype = {
             break;
         }
         if (a == -1 || b == -1)
-        return null;
+        return;
         var rng = document.createRange();
         rng.setStart(textNode, a);
         rng.setEnd(textNode, b);

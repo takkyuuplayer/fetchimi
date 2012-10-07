@@ -4,7 +4,8 @@ FetchImi.Alc = Backbone.Model.extend({
     defaults: {
         url: "http://eow.alc.co.jp/search",
         word: "test",
-        $detail: null
+        $detail: null,
+        $variation: null,
     },
     getMidashi: function() {
         if(!this.get("$detail")) {
@@ -18,6 +19,12 @@ FetchImi.Alc = Backbone.Model.extend({
         }
         var reg = new RegExp("^"+this.get("word")+"$", "i");
         return reg.test(this.getMidashi());
+    },
+    hasVariation: function() {
+        if(!this.get("$detail")) {
+            return false;
+        }
+        var word = this.get("$detail").find("div.sas a:first-child");
     },
     getPron: function() {
         if(!this.get("$detail")) {
@@ -38,10 +45,11 @@ FetchImi.Alc = Backbone.Model.extend({
         return descs;
     },
     fetch: function() {
-          console.log(this.get("word"));
-          return $.get(this.get("url"), {q: this.get("word")}).done($.proxy(function(html) {
-              this.set("$detail", $(html).find("#resultsList ul li:first-child"));
-          }, this));
+        return $.get(this.get("url"), {q: this.get("word")})
+            .done($.proxy(function(html) {
+                        this.set("$detail", $(html).find("#resultsList ul li:first-child"));
+                        }, this))
+        ;
     }
 });
 var alc = new FetchImi.Alc();
