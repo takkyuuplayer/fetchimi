@@ -2,31 +2,35 @@
 (function($) {
 var FetchImi = FetchImi || {};
 FetchImi.Foreground = function() {
+    this.port = chrome.extension.connect({name: "FetchImi.Alc"});
     this.bindEvents();
     $('body').append('<div id="fetchimi-window" style="display:none;">');
+    this.pageX = 0, this.pageY = 0;
+    this.clientX = 0, this.clientY = 0;
+    this.lTime = 0;
 };
 
 FetchImi.Foreground.prototype = {
     before: null,
-    pageX: 0,
-    pageY: 0,
-    clientX: 0,
-    clientY: 0,
-    lTime: 0,
     relative: 0,
+    resetView: function() {
+        $("#fetchimi-window").html('')
+            .removeClass()
+            .css('discplay', 'none');
+    },
     showLoading: function() {
-        $("#fetchimi-window").html('').text('検索中');
-        $("#fetchimi-window").removeClass();
-        $("#fetchimi-window").css('top', (pageY-10))
+        this.resetView()
+        $("#fetchimi-window").text('検索中')
+            .css('top', (pageY-10))
             .css('left', (pageX+10))
             .css('display', 'block')
             .addClass('searching');
     },
     showDetail: function(detail) {
-        $("#fetchimi-window").html('').text('検索中');
+        this.resetView()
         $("#fetchimi-window").html(detail);
-        $("#fetchimi-window").css('top', (pageY))
-            .css('left', (pageX))
+        $("#fetchimi-window").css('top', (pageY-10))
+            .css('left', (pageX+10))
             .css('display', 'block');
     },
     bindEvents: function() {
@@ -41,6 +45,7 @@ FetchImi.Foreground.prototype = {
             clientY = e.clientY;
         });
         $('body').on('mousemove', function(e) {
+            self.resetView()
             lTime = Date.now();
             setTimeout(function(t) {
                 if (t !== lTime) {
@@ -52,7 +57,15 @@ FetchImi.Foreground.prototype = {
                 }
                 self.before = word;
                 self.showLoading();
+                self.port.postMessage({word: word});
             }, 1000, lTime);
+        });
+        this.port.onMessage.addListener(function(msg) {
+            console.log(msg);
+            self.resetView()
+            if(msg.status === "find") {
+                self.showDetail(msg.detail);
+            }
         });
     },
     findWord: function() {
@@ -95,11 +108,5 @@ FetchImi.Foreground.prototype = {
 }
 $(function() {
     var foreground = new FetchImi.Foreground();
-    var port = chrome.extension.connect({name: "FetchImi.Alc"});
-    port.onMessage.addListener(function(msg) {
-        if(msg.status === "find") {
-            foreground.showDetail(msg.detail);
-        }
-    });
 });
 })(jQuery);

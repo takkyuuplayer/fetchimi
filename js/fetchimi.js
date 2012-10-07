@@ -38,6 +38,7 @@ FetchImi.Alc = Backbone.Model.extend({
         return descs;
     },
     fetch: function() {
+          console.log(this.get("word"));
           return $.get(this.get("url"), {q: this.get("word")}).done($.proxy(function(html) {
               this.set("$detail", $(html).find("#resultsList ul li:first-child"));
           }, this));
@@ -47,13 +48,16 @@ var alc = new FetchImi.Alc();
 chrome.extension.onConnect.addListener(function(port) {
   port.onMessage.addListener(function(msg) {
       if(! msg.word) {
+          port.postMessage({status: "notfind"});
           return;
       }
       alc.set("word", msg.word);
       alc.fetch().done(function() {
           if( alc.isFind() ) {
               port.postMessage({status: "find", detail:alc.get("$detail").html()});
+              return;
           }
+          port.postMessage({status: "notfind"});
       });
   });
 });
