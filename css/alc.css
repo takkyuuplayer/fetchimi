@@ -2,20 +2,21 @@
     background: none repeat scroll 0 0 rgba(0, 0, 0, 0.8);
     color: #FFFFFF !important;
     font-family: mplus-2p-black;
+    font-size: 14px;
     padding: 4px !important;
     margin: 0;
-    position: absolute;
+    position: fixed;
     word-wrap: break-word;
     z-index: 7777;
-    width: auto;
-    height: auto;
     text-align: left;
+    width: 550px;
 }
-#fetchimi-window .searching {
+#fetchimi-window.progress {
     color: #FFFFFF !important;
     font-weight: bold;
     padding-left: 25px;
     padding-right: 10px;
+    width: auto;
 }
 #fetchimi-window .wordlink, #fetchimi-window .searchwordfont {
     color: #FFFF00 !important;
@@ -35,9 +36,10 @@
     padding-right: 20px;
 }
 #fetchimi-window ol {
-	list-style-type: decimal;
+    margin: 10px;
+    list-style-type: decimal !important;
+    list-style-position: inside !important;
 }
 #fetchimi-window ol li {
-	margin-top: 0em;
-    line-height: 150%;
+    line-height: 110%;
 }

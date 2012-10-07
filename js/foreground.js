@@ -1,12 +1,11 @@
 //<script type="test/javascript">
 (function($) {
+var clientX = clientY = 0
 var FetchImi = FetchImi || {};
 FetchImi.Foreground = function() {
     this.port = chrome.extension.connect({name: "FetchImi.Alc"});
     this.bindEvents();
     $('body').append('<div id="fetchimi-window" style="display:none;">');
-    this.pageX = 0, this.pageY = 0;
-    this.clientX = 0, this.clientY = 0;
     this.lTime = 0;
 };
 
@@ -18,20 +17,37 @@ FetchImi.Foreground.prototype = {
             .removeClass()
             .css('display', 'none')
     },
-    showLoading: function() {
-        this.resetView()
-        $("#fetchimi-window").text('検索中')
-            .css('top', (pageY+this.relative))
-            .css('left', (pageX+this.relative))
+    showProgress: function(message) {
+        this.resetView();
+        $("#fetchimi-window").text(message)
+            .addClass('progress')
+            .css('top', (this.calcTop()))
+            .css('left', (this.calcLeft()))
             .css('display', 'block')
-            .addClass('searching');
     },
     showDetail: function(detail) {
-        this.resetView()
-        $("#fetchimi-window").html(detail);
-        $("#fetchimi-window").css('top', (pageY-10))
-            .css('left', (pageX+10))
-            .css('display', 'block');
+        this.resetView();
+        $("#fetchimi-window").html(detail)
+            .css('top', this.calcTop())
+            .css('left', this.calcLeft())
+            .css('display', 'block')
+    },
+    calcTop: function() {
+        var height = $("#fetchimi-window").outerHeight()
+        var top = clientY + height > $(window).height()
+                ? Math.max(0, $(window).height() - height - this.relative)
+                : clientY - this.relative;
+
+        return top;
+    },
+    calcLeft: function() {
+        var width = $("#fetchimi-window").outerWidth()
+        console.log(clientX + width > $(window).width())
+        var left = clientX + width > $(window).width()
+                ? Math.max(0, clientX - width - this.relative)
+                : clientX + this.relative
+
+        return left;
     },
     bindEvents: function() {
         var self = this;
@@ -39,8 +55,6 @@ FetchImi.Foreground.prototype = {
             $('#fetchimi-window').css('display', 'none');
         });
         $('body').on('mousemove', function(e) {
-            pageX = e.pageX;
-            pageY = e.pageY;
             clientX = e.clientX;
             clientY = e.clientY;
         });
@@ -56,7 +70,7 @@ FetchImi.Foreground.prototype = {
                     return;
                 }
                 self.before = word;
-                self.showLoading();
+                self.showProgress('Searching...');
                 self.port.postMessage({word: word});
             }, 1000, lTime);
         });
@@ -64,7 +78,10 @@ FetchImi.Foreground.prototype = {
             self.resetView()
             if(msg.status === "find") {
                 self.showDetail(msg.detail);
+            } else if(msg.status === 'not found') {
+                self.showProgress('Not Found');
             }
+
         });
     },
     findWord: function() {

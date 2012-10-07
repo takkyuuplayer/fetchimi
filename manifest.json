@@ -10,7 +10,7 @@
                 "https://*/*"
             ],
             "js": ["./js/jquery-1.8.1.min.js", "./js/foreground.js"],
-            "css": ["./css/alc.css"],
+            "css": ["./css/cssreset-min.css", "./css/alc.css"],
             "run_at": "document_end"
         }
   ],

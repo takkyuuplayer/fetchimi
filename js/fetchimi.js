@@ -56,7 +56,7 @@ var alc = new FetchImi.Alc();
 chrome.extension.onConnect.addListener(function(port) {
   port.onMessage.addListener(function(msg) {
       if(! msg.word) {
-          port.postMessage({status: "notfind"});
+          port.postMessage({status: "not found"});
           return;
       }
       alc.set("word", msg.word);
@@ -65,7 +65,7 @@ chrome.extension.onConnect.addListener(function(port) {
               port.postMessage({status: "find", detail:alc.get("$detail").html()});
               return;
           }
-          port.postMessage({status: "notfind"});
+          port.postMessage({status: "not found"});
       });
   });
 });
