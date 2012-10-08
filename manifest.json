@@ -1,8 +1,8 @@
 {
-  "name": "My First Extension",
-  "version": "1.1.10",
+  "name": "FetchImi",
+  "version": "0.1.0",
   "manifest_version": 2,
-  "description": "The first extension that I made.",
+  "description": "Mouse over dictionary.",
   "content_scripts": [
         {
             "matches": [
