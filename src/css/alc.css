@@ -37,6 +37,7 @@
 }
 #fetchimi-window ol {
     margin: 10px;
+    padding: 0px;
     list-style-type: decimal !important;
     list-style-position: inside !important;
 }
